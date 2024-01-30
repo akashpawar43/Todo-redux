@@ -3,7 +3,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // get all data using endpoint " / "
 export const getTodosAsync = createAsyncThunk('todos/getTodoAsync',
     async () => {
-        const response = await fetch('http://localhost:4000/');
+        // const response = await fetch('http://localhost:4000/');
+        const response = await fetch('https://todo-redux-backend.vercel.app/');
         if (response.ok) {
             const todos = await response.json();
             return { todos };
@@ -15,7 +16,7 @@ export const getTodosAsync = createAsyncThunk('todos/getTodoAsync',
 // get all data using endpoint " /add "
 export const addTodosAsync = createAsyncThunk('todos/addTodoAsync',
     async (payload) => {
-        const response = await fetch('http://localhost:4000/add', {
+        const response = await fetch('https://todo-redux-backend.vercel.app/add', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -35,7 +36,7 @@ export const addTodosAsync = createAsyncThunk('todos/addTodoAsync',
 // get all data using endpoint " /update/:id "
 export const completeTododAsync = createAsyncThunk("todos/completeTodoAsync",
     async (payload) => {
-        const response = await fetch(`http://localhost:4000/update/${payload.id}`, {
+        const response = await fetch(`https://todo-redux-backend.vercel.app/update/${payload.id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -53,7 +54,8 @@ export const completeTododAsync = createAsyncThunk("todos/completeTodoAsync",
 
 // get all data using endpoint " /delete/:id "
 export const deleteTodoAsync = createAsyncThunk("todos/deleteTodoAsync", async (payload) => {
-    const response = await fetch(`http://localhost:4000/delete/${payload.id}`, {
+    // const response = await fetch(`http://localhost:4000/delete/${payload.id}`, {
+    const response = await fetch(`https://todo-redux-backend.vercel.app/delete/${payload.id}`, {
         method: "DELETE",
         headers: {
             "Content-type": "application/json",
