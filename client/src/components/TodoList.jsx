@@ -1,28 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import Todoitems from './Todoitems'
 import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
+import { getTodosAsync } from '../redux/todoSlice'
 
 export default function TodoList() {
-    const [todos, setTodos] = useState([]);
-    // const todos = [
-    //     { id: 1, name: "Task 1", description: "This is my task one" , complete: true},
-    //     { id: 2, name: "Task 2", description: "This is my task two", complete: false},
-    //     { id: 3, name: "Task 3", description: "This is my task three", complete: true},
-    //     { id: 4, name: "Task 4", description: "This is my task four", complete: true},
-    // ]
+    const dispatch = useDispatch();
+    const todos = useSelector((state)=> state.todos)
 
-    useEffect(() => {
-        axios.get("http://localhost:4000/")
-            .then(res => setTodos(res.data))
-            .catch(err => console.log(err))
-    }, [])
+    useEffect(()=>{
+        dispatch(getTodosAsync());
+    }, [dispatch])
 
     return (
         <section className='bg-zinc-700 rounded-md mt-4 w-full'>
             <ul className='grid grid-cols-1 rounded-md'>
                 {todos.length > 0 ? (
                     todos.map((todo, i) => (
-                        <Todoitems key={i} id={todo._id} name={todo.name} description={todo.description} complete={todo.complete} />
+                        <Todoitems key={i} id={todo._id} title={todo.title} description={todo.description} complete={todo.complete} />
                     )))
                     : (<p className='text-white text-center p-4'>There is no Todo right now</p>)
                 }

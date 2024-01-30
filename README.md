@@ -11,7 +11,7 @@ Here're some of the project's best features:
 *   Add Todo
 *   get Todo list
 *   Update Status
-*   Delete Note
+*   Delete Todo
 
 
 <h2>🛠️ Installation Steps:</h2>
@@ -76,6 +76,6 @@ Technologies used in the project:
 
 <img src="https://github.com/akashpawar43/Todo/blob/master/client/src/assets/delete.png" alt="project-screenshot" >
 
-4. No data 
+5. No data 
 
 <img src="https://github.com/akashpawar43/Todo/blob/master/client/src/assets/noData.png" alt="project-screenshot" >

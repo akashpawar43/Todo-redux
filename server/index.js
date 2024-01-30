@@ -1,14 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const Todo = require('./model/Todo')
-const PORT = 4000;
+const Todo = require('./model/Todo');
+const dotenv = require('dotenv').config();
+const PORT = process.env.PORT;
+const MONGO_URL = process.env.MONGO_URL;
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect("mongodb://0.0.0.0:27017/todo")
+mongoose.connect(MONGO_URL)
     .then(console.log("Database is Connected"))
     .catch(err => console.log(err))
 
@@ -33,9 +35,9 @@ app.put("/update/:id", async (req, res) => {
 
 app.post("/add", async (req, res) => {
     try {
-        const { name, description } = req.body;
+        const { title, description } = req.body;
         const data = await Todo.create({
-            name: name,
+            title: title,
             description: description
         })
         res.send(data);
