@@ -1,6 +1,6 @@
 <h1 align="center" id="title">TODO</h1>
 
-<p id="description">Todo app Build using MERN Stack. Allowing to Creating Todo list, Update and Delete Todo list within app.</p>
+<p id="description">Todo app Build using MERN Stack , Redux toolkit and Thunk api. Allowing to Creating Todo list, Update and Delete Todo list within app.</p>
 
   
   
@@ -52,6 +52,8 @@ npm run dev
 Technologies used in the project:
 
 *   ReactJs
+*   Redux Toolkit
+*   Thunk API
 *   NodeJs
 *   Mongodb
 *   ExpressJS
