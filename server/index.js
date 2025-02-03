@@ -46,10 +46,31 @@ app.post("/add", async (req, res) => {
     }
 })
 
-app.delete('/delete/:id', async (req,res)=>{
+app.get("/todo/:id", async (req, res) => {
     try {
-        const {id} = req.params;
-        const del = await Todo.findOneAndDelete({_id: id})
+        const { id } = req.params;
+        const data = await Todo.findById({ _id: id });
+        res.send(data);
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+app.patch("/todo/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { title, description } = req.body;
+        const data = await Todo.findByIdAndUpdate({ _id: id }, { title, description });
+        res.send(data);
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+app.delete('/delete/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const del = await Todo.findOneAndDelete({ _id: id })
         res.json(del)
     } catch (error) {
         console.log(error);
