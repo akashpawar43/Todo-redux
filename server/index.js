@@ -37,9 +37,9 @@ app.put("/update/:id", async (req, res) => {
 const addTodoSchema = z.object({
     title: z.string().min(3, "Title must be at least 3 characters"),
     description: z.string().min(5, "description must be at least 5 characters"),
-    priority: z.enum(["Low", "Medium", "High", "Urgent"]),
-    status: z.enum(["Pending", "In Progress", "Completed", "Archived"]),
-    category: z.enum(["Personal", "Work", "Shopping", "Fitness"]),
+    priority: z.enum(["Low", "Medium", "High", "Urgent"]).default("Medium"),
+    status: z.enum(["Pending", "In Progress", "Completed", "Archived"]).default("Pending"),
+    category: z.enum(["Personal", "Work", "Shopping", "Fitness"]).default("Work"),
     dueDate: z.preprocess((arg) => (typeof arg === "string" ? new Date(arg) : arg), z.date())
 })
 
