@@ -35,10 +35,14 @@ app.put("/update/:id", async (req, res) => {
 
 app.post("/add", async (req, res) => {
     try {
-        const { title, description } = req.body;
+        const { title, description, priority, status, category, dueDate } = req.body;
         const data = await Todo.create({
             title: title,
-            description: description
+            description: description,
+            priority,
+            status,
+            category,
+            dueDate
         })
         res.send(data);
     } catch (error) {
@@ -59,8 +63,8 @@ app.get("/todo/:id", async (req, res) => {
 app.patch("/todo/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, description } = req.body;
-        const data = await Todo.findByIdAndUpdate({ _id: id }, { title, description });
+        const { title, description, priority, status, category, dueDate } = req.body;
+        const data = await Todo.findByIdAndUpdate({ _id: id }, { title, description, priority, status, category, dueDate });
         res.send(data);
     } catch (error) {
         console.log(error);
