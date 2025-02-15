@@ -17,7 +17,7 @@ const TodoSchema = new mongoose.Schema({
     },
     priority: {
         type: String,
-        default: 'Low',
+        default: 'Medium',
     },
     status: {
         type: String,
@@ -25,7 +25,7 @@ const TodoSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        default: 'Personal',
+        default: 'Work',
     },
     dueDate: {
         type: Date,
