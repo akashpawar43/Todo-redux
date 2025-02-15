@@ -5,6 +5,7 @@ const Todo = require('./model/Todo');
 const dotenv = require('dotenv').config();
 const PORT = process.env.PORT;
 const MONGO_URL = process.env.MONGO_URL;
+const { z } = require('zod');
 
 const app = express();
 app.use(cors());
@@ -33,9 +34,23 @@ app.put("/update/:id", async (req, res) => {
     }
 })
 
+const addTodoSchema = z.object({
+    title: z.string().min(3, "Title must be at least 3 characters"),
+    description: z.string().min(5, "description must be at least 5 characters"),
+    priority: z.enum(["Low", "Medium", "High", "Urgent"]),
+    status: z.enum(["Pending", "In Progress", "Completed", "Archived"]),
+    category: z.enum(["Personal", "Work", "Shopping", "Fitness"]),
+    dueDate: z.preprocess((arg) => (typeof arg === "string" ? new Date(arg) : arg), z.date())
+})
+
 app.post("/add", async (req, res) => {
     try {
-        const { title, description, priority, status, category, dueDate } = req.body;
+        const parsed = addTodoSchema.safeParse(req.body);
+        if (!parsed.success) {
+            return res.status(400).json({ error: parsed.error.format() });
+        }
+        const { title, description, priority, status, category, dueDate } = parsed.data;
+
         const data = await Todo.create({
             title: title,
             description: description,
@@ -60,10 +75,27 @@ app.get("/todo/:id", async (req, res) => {
     }
 })
 
+const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
+
+// Zod schema for ID validation
+const idSchema = z.string().refine((id) => isValidObjectId(id), {
+  message: "Invalid MongoDB ObjectId",
+});
+
 app.patch("/todo/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, description, priority, status, category, dueDate } = req.body;
+
+        const idValidation = idSchema.safeParse(id);
+        if (!idValidation.success) {
+            return res.status(400).json({ error: idValidation.error.format() });
+        }
+
+        const parsed = addTodoSchema.safeParse(req.body);
+        if (!parsed.success) {
+            return res.status(400).json({ error: parsed.error.format() });
+        }
+        const { title, description, priority, status, category, dueDate } = parsed.data;
         const data = await Todo.findByIdAndUpdate({ _id: id }, { title, description, priority, status, category, dueDate });
         res.send(data);
     } catch (error) {
@@ -74,6 +106,10 @@ app.patch("/todo/:id", async (req, res) => {
 app.delete('/delete/:id', async (req, res) => {
     try {
         const { id } = req.params;
+        const idValidation = idSchema.safeParse(id);
+        if (!idValidation.success) {
+            return res.status(400).json({ error: idValidation.error.format() });
+        }
         const del = await Todo.findOneAndDelete({ _id: id })
         res.json(del)
     } catch (error) {
