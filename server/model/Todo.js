@@ -1,11 +1,17 @@
 const mongoose = require('mongoose');
 
 const TodoSchema = new mongoose.Schema({
-    title: String,
-    description: String,
+    title: {
+        type: String,
+        required: true,
+    },
+    description: {
+        type: String,
+        required: true,
+    },
     complete: {
         type: Boolean,
-        default: false
+        default: false,
     },
     priority: {
         type: String,
@@ -21,6 +27,7 @@ const TodoSchema = new mongoose.Schema({
     },
     dueDate: {
         type: Date,
+        default: new Date(),
     }
 })
 
