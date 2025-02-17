@@ -47,6 +47,7 @@ app.post("/add", async (req, res) => {
     try {
         const parsed = addTodoSchema.safeParse(req.body);
         if (!parsed.success) {
+            console.log("err:", parsed.error.errors)
             return res.status(400).json({ error: parsed.error.format() });
         }
         const { title, description, priority, status, category, dueDate } = parsed.data;
@@ -79,7 +80,7 @@ const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
 // Zod schema for ID validation
 const idSchema = z.string().refine((id) => isValidObjectId(id), {
-  message: "Invalid MongoDB ObjectId",
+    message: "Invalid MongoDB ObjectId",
 });
 
 app.patch("/todo/:id", async (req, res) => {
@@ -90,13 +91,16 @@ app.patch("/todo/:id", async (req, res) => {
         if (!idValidation.success) {
             return res.status(400).json({ error: idValidation.error.format() });
         }
-
+        const todoExists = await Todo.findById(id);
+        if (!todoExists) {
+            return res.status(400).json({ message: 'Todo does not exists!' });
+        }
         const parsed = addTodoSchema.safeParse(req.body);
         if (!parsed.success) {
             return res.status(400).json({ error: parsed.error.format() });
         }
         const { title, description, priority, status, category, dueDate } = parsed.data;
-        const data = await Todo.findByIdAndUpdate({ _id: id }, { title, description, priority, status, category, dueDate });
+        const data = await Todo.findByIdAndUpdate({ _id: id }, { title, description, priority, status, category, dueDate }, { new: true });
         res.send(data);
     } catch (error) {
         console.log(error);
